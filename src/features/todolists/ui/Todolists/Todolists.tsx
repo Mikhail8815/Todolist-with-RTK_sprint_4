@@ -3,7 +3,7 @@ import { TodolistItem } from "./TodolistItem/TodolistItem"
 import Grid from "@mui/material/Grid2"
 import Paper from "@mui/material/Paper"
 import { useEffect } from "react"
-import { selectTodolists, setTodolists } from "@/features/todolists/model/todolists-slice.ts"
+import { fetchTodolists, selectTodolists } from "@/features/todolists/model/todolists-slice.ts"
 
 export const Todolists = () => {
   const todolists = useAppSelector(selectTodolists)
@@ -11,7 +11,7 @@ export const Todolists = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(setTodolists())
+    dispatch(fetchTodolists())
   }, [])
 
   return (
