@@ -1,8 +1,8 @@
 import { TaskPriority, TaskStatus } from "@/common/enums"
 import { nanoid } from "@reduxjs/toolkit"
 import { beforeEach, expect, test } from "vitest"
-import { createTask, deleteTask, tasksReducer, type TasksState, updateTask } from "../tasks-slice"
-import { createTodolist, deleteTodolist } from "../todolists-slice"
+import { createTaskTC, deleteTaskTC, tasksReducer, type TasksState, updateTaskTC } from "../tasks-slice"
+import { createTodolistTC, deleteTodolistTC } from "../todolists-slice"
 
 let startState: TasksState = {}
 
@@ -33,7 +33,7 @@ beforeEach(() => {
 test("correct task should be deleted", () => {
   const endState = tasksReducer(
     startState,
-    deleteTask.fulfilled({ todolistId: "todolistId2", taskId: "2" }, "requestId", {
+    deleteTaskTC.fulfilled({ todolistId: "todolistId2", taskId: "2" }, "requestId", {
       todolistId: "todolistId2",
       taskId: "2",
     }),
@@ -122,7 +122,7 @@ test("correct task should be created at correct array", () => {
   }
   const endState = tasksReducer(
     startState,
-    createTask.fulfilled({ task }, "requestId", { todolistId: "todolistId2", title: "juice" }),
+    createTaskTC.fulfilled({ task }, "requestId", { todolistId: "todolistId2", title: "juice" }),
   )
 
   expect(endState.todolistId1.length).toBe(3)
@@ -147,7 +147,7 @@ test("correct task should change its status", () => {
   }
   const endState = tasksReducer(
     startState,
-    updateTask.fulfilled({ task }, "requestId", {
+    updateTaskTC.fulfilled({ task }, "requestId", {
       todolistId: "todolistId2",
       taskId: "2",
       domainModel: { status: TaskStatus.New },
@@ -173,7 +173,7 @@ test("correct task should change its title", () => {
   }
   const endState = tasksReducer(
     startState,
-    updateTask.fulfilled({ task }, "requestId", {
+    updateTaskTC.fulfilled({ task }, "requestId", {
       todolistId: "todolistId2",
       taskId: "2",
       domainModel: { title: "coffee" },
@@ -187,7 +187,7 @@ test("correct task should change its title", () => {
 test("array should be created for new todolist", () => {
   const title = "New todolist"
   const todolist = { id: "todolistId3", title, addedDate: "", order: 0 }
-  const endState = tasksReducer(startState, createTodolist.fulfilled({ todolist }, "requestId", title))
+  const endState = tasksReducer(startState, createTodolistTC.fulfilled({ todolist }, "requestId", title))
 
   const keys = Object.keys(endState)
   const newKey = keys.find((k) => k !== "todolistId1" && k !== "todolistId2")
@@ -200,7 +200,10 @@ test("array should be created for new todolist", () => {
 })
 
 test("property with todolistId should be deleted", () => {
-  const endState = tasksReducer(startState, deleteTodolist.fulfilled({ id: "todolistId2" }, "requestId", "todolistId2"))
+  const endState = tasksReducer(
+    startState,
+    deleteTodolistTC.fulfilled({ id: "todolistId2" }, "requestId", "todolistId2"),
+  )
 
   const keys = Object.keys(endState)
 
